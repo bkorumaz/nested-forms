@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm, FormProvider, useFormContext } from "react-hook-form";
+import { useForm, FormProvider, useFormContext, useWatch } from "react-hook-form";
 
 export default function App() {
   const methods = useForm();
@@ -12,6 +12,7 @@ export default function App() {
         <PersonInfo />
         <JobInfo />
         <input type="submit" />
+        <WelcomeMessage control={methods.control} />
       </form>
     </FormProvider>
   );
@@ -37,4 +38,14 @@ function JobInfo() {
       <input name="title" ref={register} />
     </>
   );
+}
+
+function WelcomeMessage({ control }) {
+  const firstName = useWatch({
+    control,
+    name: 'name', // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
+    defaultValue: 'User' // default value before the render
+  });
+
+  return <h3>Welcome {firstName}!</h3>; // only re-render at the component level, when firstName changes
 }
